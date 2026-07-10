@@ -3,6 +3,7 @@
 	"type": "module",
 	"private": true,
 	"license": "UNLICENSED",
+	"packageManager": "yarn@1.22.22",
 	"scripts": {
 		"// dev": "LOCAL — Nuxt dev server; D1 binding được emulate qua nitro-cloudflare-dev.",
 		"dev": "nuxt dev",
