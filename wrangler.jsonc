@@ -6,6 +6,10 @@
 	// Confirm sau build đầu: Nitro cloudflare-pages preset thường emit `./dist`.
 	// Nếu build ra `.output/public`, đổi giá trị này cho khớp.
 	"pages_build_output_dir": "./dist",
+	"vars": {
+		"NUXT_AUTH_USERNAME": "TuanPham",
+		"NODE_VERSION": "22.18.0",
+	},
 	"d1_databases": [
 		{
 			"binding": "DB",
@@ -13,12 +17,6 @@
 			// TODO: chạy `wrangler d1 create self-craft-db` rồi paste UUID vào đây.
 			"database_id": "6338a998-bad6-46d6-bc79-e87108d76c53",
 			"migrations_dir": "server/database/migrations",
-		},
-		{
-			"binding": "self_craft_db",
-			"database_name": "self-craft-db",
-			"database_id": "6338a998-bad6-46d6-bc79-e87108d76c53",
-			"remote": true,
 		},
 	],
 }
