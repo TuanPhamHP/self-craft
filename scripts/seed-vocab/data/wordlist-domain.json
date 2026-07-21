@@ -1,0 +1,787 @@
+[
+ {
+  "word": "algorithm",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈæɫɡɝˌɪðəm/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "syntax",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈsɪnˌtæks/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "debug",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/diˈbəɡ/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "cache",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈkæʃ/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "token",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈtoʊkən/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "repository",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ɹiˈpɑzəˌtɔɹi/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "template",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈtɛmpɫeɪt/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "module",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈmɑdʒuɫ/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "validation",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˌvæɫəˈdeɪʃən/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "bandwidth",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈbændwɪdθ/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "encryption",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ɛnˈkɹɪpʃən/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "iteration",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˌɪtɝˈeɪʃən/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "prototype",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈpɹoʊtəˌtaɪp/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "automation",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ɔtəˈmeɪʃən/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "optimize",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈɑptəˌmaɪz/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "runtime",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈrʌntaɪm/",
+  "domain": "Lập trình",
+  "ipa_source": "manual"
+ },
+ {
+  "word": "plugin",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈpɫəɡɪn/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "frontend",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈfrʌntend/",
+  "domain": "Lập trình",
+  "ipa_source": "manual"
+ },
+ {
+  "word": "backend",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˌbæˈkɛnd/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "fullstack",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈfʊlstæk/",
+  "domain": "Lập trình",
+  "ipa_source": "manual"
+ },
+ {
+  "word": "api",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˌeɪˌpiˈaɪ/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "recursion",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/rɪˈkɜɹʒən/",
+  "domain": "Lập trình",
+  "ipa_source": "manual",
+  "enriched": true
+ },
+ {
+  "word": "inheritance",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌɪnˈhɛɹətəns/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "encapsulation",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ɪnˌkæpsjuˈleɪʃən/",
+  "domain": "Lập trình",
+  "ipa_source": "manual"
+ },
+ {
+  "word": "polymorphism",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌpɑˌɫiˈmɔɹfɪzm/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "middleware",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈmɪdlwɛɹ/",
+  "domain": "Lập trình",
+  "ipa_source": "manual",
+  "enriched": true
+ },
+ {
+  "word": "endpoint",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈɛndˌpɔɪnt/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "asynchronous",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈeɪˈsɪŋkɹənəs/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "callback",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈkɔɫˌbæk/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "immutable",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌɪmˈjutəbəɫ/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "dependency",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/dɪˈpɛndənsi/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "orchestration",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌɔɹkəˈstɹeɪʃən/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "microservice",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈmaɪkɹoʊˌsɜɹvɪs/",
+  "domain": "Lập trình",
+  "ipa_source": "manual",
+  "enriched": true
+ },
+ {
+  "word": "monolith",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈmɑnəˌɫɪθ/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "schema",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈskimə/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "rollback",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈɹoʊɫˌbæk/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "refactor",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ɹiˈfæktɚ/",
+  "domain": "Lập trình",
+  "ipa_source": "manual",
+  "enriched": true
+ },
+ {
+  "word": "latency",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈɫeɪtənsi/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "throughput",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈθɹuˌpʊt/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "scalability",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈskeɪɫəˈbɪɫɪti/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "concurrency",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/kənˈkɜɹənsi/",
+  "domain": "Lập trình",
+  "ipa_source": "manual",
+  "enriched": true
+ },
+ {
+  "word": "serialize",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈsɪˌɹiəˌɫaɪz/",
+  "domain": "Lập trình",
+  "enriched": true
+ },
+ {
+  "word": "parse",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈpɑɹs/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "transpile",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/tɹænˈspaɪl/",
+  "domain": "Lập trình",
+  "ipa_source": "manual"
+ },
+ {
+  "word": "lint",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈɫɪnt/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "artifact",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈɑɹtəˌfækt/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "monitoring",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈmɑnətɝɪŋ/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "failover",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈfeɪloʊvɚ/",
+  "domain": "Lập trình",
+  "ipa_source": "manual"
+ },
+ {
+  "word": "redundancy",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ɹɪˈdəndənsi/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "replication",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌɹɛpɫəˈkeɪʃən/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "sharding",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈʃɑɹdɪŋ/",
+  "domain": "Lập trình",
+  "ipa_source": "manual"
+ },
+ {
+  "word": "partition",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/pɑɹˈtɪʃən/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "snapshot",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈsnæpˌʃɑt/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "sanitize",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈsænɪˌtaɪz/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "idempotent",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌaɪdɛmˈpoʊtənt/",
+  "domain": "Lập trình",
+  "ipa_source": "manual",
+  "enriched": true
+ },
+ {
+  "word": "abstraction",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/æbˈstɹækʃən/",
+  "domain": "Lập trình"
+ },
+ {
+  "word": "liability",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˌɫaɪəˈbɪɫɪti/",
+  "domain": "Kinh tế",
+  "enriched": true
+ },
+ {
+  "word": "invoice",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈɪnvɔɪs/",
+  "domain": "Kinh tế"
+ },
+ {
+  "word": "wholesale",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈhoʊɫˌseɪɫ/",
+  "domain": "Kinh tế"
+ },
+ {
+  "word": "tariff",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈtɛɹəf/",
+  "domain": "Kinh tế",
+  "enriched": true
+ },
+ {
+  "word": "dividend",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈdɪvɪˌdɛnd/",
+  "domain": "Kinh tế",
+  "enriched": true
+ },
+ {
+  "word": "liquidity",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ɫɪˈkwɪdəti/",
+  "domain": "Kinh tế",
+  "enriched": true
+ },
+ {
+  "word": "depreciation",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/dɪˌpɹiʃiˈeɪʃən/",
+  "domain": "Kinh tế"
+ },
+ {
+  "word": "valuation",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/væɫjuˈeɪʃən/",
+  "domain": "Kinh tế",
+  "enriched": true
+ },
+ {
+  "word": "stakeholder",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈsteɪkˌhoʊɫdɝ/",
+  "domain": "Kinh tế"
+ },
+ {
+  "word": "monetary",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈmɑnəˌtɛɹi/",
+  "domain": "Kinh tế"
+ },
+ {
+  "word": "volatility",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌvɑɫəˈtɪɫəti/",
+  "domain": "Kinh tế"
+ },
+ {
+  "word": "diversification",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/daɪˌvɝsəfəˈkeɪʃən/",
+  "domain": "Kinh tế"
+ },
+ {
+  "word": "arbitrage",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈɑɹbɪˌtɹɑʒ/",
+  "domain": "Kinh tế"
+ },
+ {
+  "word": "collateral",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/kəˈɫætɝəɫ/",
+  "domain": "Kinh tế"
+ },
+ {
+  "word": "solvency",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈsɔɫvənsi/",
+  "domain": "Kinh tế"
+ },
+ {
+  "word": "neighbor",
+  "pos": null,
+  "band": "B1",
+  "ipa": "/ˈneɪbɝ/",
+  "domain": "Xã hội"
+ },
+ {
+  "word": "urbanization",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˌɝbənəˈzeɪʃən/",
+  "domain": "Xã hội",
+  "enriched": true
+ },
+ {
+  "word": "censorship",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈsɛnsɝˌʃɪp/",
+  "domain": "Xã hội"
+ },
+ {
+  "word": "activism",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈæktɪˌvɪzəm/",
+  "domain": "Xã hội",
+  "enriched": true
+ },
+ {
+  "word": "ethnicity",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ɛθˈnɪsɪti/",
+  "domain": "Xã hội"
+ },
+ {
+  "word": "census",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈsɛnsəs/",
+  "domain": "Xã hội",
+  "enriched": true
+ },
+ {
+  "word": "marginalize",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈmɑɹdʒənəˌɫaɪz/",
+  "domain": "Xã hội"
+ },
+ {
+  "word": "disparity",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/dɪˈspɛɹəti/",
+  "domain": "Xã hội"
+ },
+ {
+  "word": "polarization",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌpoʊɫɝəˈzeɪʃən/",
+  "domain": "Xã hội"
+ },
+ {
+  "word": "gentrification",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌdʒɛntɹɪfɪˈkeɪʃən/",
+  "domain": "Xã hội"
+ },
+ {
+  "word": "demographic",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌdɛməˈɡɹæfɪk/",
+  "domain": "Xã hội",
+  "enriched": true
+ },
+ {
+  "word": "assimilation",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/əˌsɪməˈɫeɪʃən/",
+  "domain": "Xã hội"
+ },
+ {
+  "word": "disenfranchise",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/dɪsɪnˈfɹænˌtʃaɪz/",
+  "domain": "Xã hội"
+ },
+ {
+  "word": "egalitarian",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ɪˌɡæɫəˈtɛɹiən/",
+  "domain": "Xã hội"
+ },
+ {
+  "word": "villain",
+  "pos": null,
+  "band": "B1",
+  "ipa": "/ˈvɪɫən/",
+  "domain": "Văn học"
+ },
+ {
+  "word": "autobiography",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˌɔtəbaɪˈɑɡɹəfi/",
+  "domain": "Văn học"
+ },
+ {
+  "word": "symbolism",
+  "pos": null,
+  "band": "B2",
+  "ipa": "/ˈsɪmbəˌɫɪzəm/",
+  "domain": "Văn học",
+  "enriched": true
+ },
+ {
+  "word": "simile",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈsɪməli/",
+  "domain": "Văn học",
+  "ipa_source": "manual",
+  "enriched": true
+ },
+ {
+  "word": "satire",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈsæˌtaɪɝ/",
+  "domain": "Văn học",
+  "enriched": true
+ },
+ {
+  "word": "protagonist",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/pɹoʊˈtæɡənəst/",
+  "domain": "Văn học",
+  "enriched": true
+ },
+ {
+  "word": "antagonist",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ænˈtæɡənəst/",
+  "domain": "Văn học",
+  "enriched": true
+ },
+ {
+  "word": "monologue",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈmɑnəˌɫɔɡ/",
+  "domain": "Văn học",
+  "enriched": true
+ },
+ {
+  "word": "allegory",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈæɫəˌɡɔɹi/",
+  "domain": "Văn học",
+  "enriched": true
+ },
+ {
+  "word": "anthology",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ænˈθɑɫədʒi/",
+  "domain": "Văn học"
+ },
+ {
+  "word": "foreshadowing",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/fɔɹˈʃædoʊɪŋ/",
+  "domain": "Văn học",
+  "enriched": true
+ },
+ {
+  "word": "flashback",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈfɫæʃˌbæk/",
+  "domain": "Văn học"
+ },
+ {
+  "word": "climax",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈkɫaɪˌmæks/",
+  "domain": "Văn học",
+  "enriched": true
+ },
+ {
+  "word": "denouement",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌdeɪˌnuˈmɑn/",
+  "domain": "Văn học"
+ },
+ {
+  "word": "motif",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/moʊˈtif/",
+  "domain": "Văn học"
+ },
+ {
+  "word": "juxtaposition",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌdʒəkstəpəˈzɪʃən/",
+  "domain": "Văn học"
+ },
+ {
+  "word": "archetype",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈɑɹkɪˌtaɪp/",
+  "domain": "Văn học"
+ },
+ {
+  "word": "pastiche",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˌpæsˈtiʃ/",
+  "domain": "Văn học"
+ },
+ {
+  "word": "elegy",
+  "pos": null,
+  "band": "C1",
+  "ipa": "/ˈɛɫəˌdʒi/",
+  "domain": "Văn học"
+ }
+]

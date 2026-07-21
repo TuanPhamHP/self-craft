@@ -1,10 +1,23 @@
-// Augment nuxt-auth-utils' User interface với field session cần cho single-user app.
-// Đặt ở shared/types/ vì cả app tsconfig lẫn server tsconfig đều include glob
-// "shared/*.d.ts" recursive (theo Nuxt generated tsconfig).
-
+/**
+ * Module augmentation cho nuxt-auth-utils.
+ * Session shape dùng khắp `useUserSession()` (client) + `requireUserSession(event)` (server).
+ * Đặt trong shared/types/ để cả tsconfig client + server đều pick up (glob shared d.ts).
+ * Đổi field ở đây → phải update setUserSession call site + UI đọc user.
+ */
 declare module '#auth-utils' {
   interface User {
-    name: string
+    id: number
+    email: string
+    name: string | null
+    isAdmin: boolean
+  }
+
+  interface UserSession {
+    user: User
+  }
+
+  interface SecureSessionData {
+    // Reserved: chỉ đọc được ở server (không gửi về client). Chưa dùng.
   }
 }
 

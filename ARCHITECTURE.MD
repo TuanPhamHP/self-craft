@@ -1,13 +1,14 @@
-# ARCHITECTURE — Learning PWA (cá nhân)
+# ARCHITECTURE — Learning PWA
 
 > Tài liệu design-of-record. Mọi quyết định kiến trúc chốt ở đây. Khi thực thi khác tài liệu này → cập nhật tài liệu, đừng để lệch ngầm.
 
 ## 1. Mục tiêu & nguyên tắc
 
-- App **cá nhân**, 1 user. Ưu tiên **ship nhanh**, tránh over-engineering.
+- **Multi-user, invite-only** (owner mời qua email; không open registration). Ưu tiên **ship nhanh**, tránh over-engineering.
 - **Extensible**: mỗi môn học là 1 module độc lập; thêm môn mới **không đụng core**.
 - **Data học tập tích lũy lâu dài** → migration phải data-safe, không mất data.
-- Core dùng chung: **SRS engine**, progress/streak/statistics, UI kit.
+- Core dùng chung: **auth**, **SRS engine**, progress/streak/statistics, UI kit.
+- **Data scope per-user**: mọi bảng data (cards, review logs, vocab, ...) đều có `user_id` FK. Mọi query PHẢI filter userId — quên 1 chỗ = leak cross-user.
 
 ## 2. Stack (đã verify current, 07/2026)
 
@@ -16,7 +17,8 @@
 | Framework | **Nuxt 4** (srcDir = `app/`) | Composition API, `<script setup>`, TS strict |
 | Host | **Cloudflare Pages** (SSR) | Nitro preset `cloudflare-pages` |
 | DB | **Cloudflare D1** + **Drizzle ORM** | `drizzle-orm/d1`; migration qua `drizzle-kit` + `wrangler` |
-| Auth | **nuxt-auth-utils** | Sealed-cookie session (h3), Workers-compatible, không cần session store |
+| Auth | **nuxt-auth-utils** | Sealed-cookie session (h3), Workers-compatible, không cần session store. User + invite + reset lưu D1 |
+| Email | **Resend** (REST API, fetch trực tiếp) | Transactional email cho invite + reset password. Free tier 3000/tháng. Dev fallback: log link ra console khi env EMPTY |
 | UI | **Nuxt UI 4** + **Tailwind v4** | v4 đã stable & free (unified UI+Pro); native Nuxt Layers support |
 | State | **Pinia** |  |
 | Validation | **Zod** | Schema dùng chung client/server |
@@ -136,19 +138,37 @@ Bên dưới dùng `fsrs()`, `scheduler.repeat()` (preview), `scheduler.next(car
 
 Quy ước bảng:
 
-- `core_*`: srs cards, review logs, streak, user (1 row).
-- `eng_*`, `prog_*`: dữ liệu riêng module.
-- Card model tách 2 phần: **content** (thuộc module, vd `eng_vocab`) + **srs state** (bảng `core_cards` chung, tham chiếu `module` + `item_id`). Cho phép SRS engine xử lý mọi loại card đồng nhất.
+- `core_users`: tài khoản (email unique, password_hash scrypt, is_admin, `name` nullable). First-registered user auto = admin (bootstrap khi DB rỗng); sau đó registration invite-only.
+- `core_invites`: token mời (token_hash SHA-256, expires_at TTL 7 ngày, used_at nullable, invited_by FK).
+- `core_password_resets`: token reset password (token_hash SHA-256, expires_at TTL 1 giờ, used_at nullable, user_id FK CASCADE).
+- `core_review_logs`: audit trail **module-agnostic** — `(module, item_id)` thay vì FK card cụ thể. Ví dụ English: `module='english'`, `item_id = eng_vocab.id`. Không bao giờ DROP/rewrite.
+- `core_cards`: **hiện chưa dùng.** Ban đầu thiết kế làm SRS state chung; sau English restructure (xem dưới) đã chuyển sang bảng module-specific. Giữ nguyên chờ Programming (P2) quyết định pattern.
+- `eng_*`, `prog_*`: dữ liệu riêng module. Mỗi module tự quyết pattern (shared pool hay per-user).
+
+**English data model** (sau restructure shared-pool):
+
+- `eng_vocab`: **content pool 2 nguồn**:
+  - `created_by IS NULL` = từ hệ thống (seed), mọi user thấy.
+  - `created_by = <userId>` = từ private user tự thêm, chỉ user đó thấy.
+  - Partial unique index: `(word) WHERE created_by IS NULL` + `(created_by, word) WHERE created_by IS NOT NULL`.
+- `eng_user_vocab`: **SRS state + personal note per (user_id, vocab_id)** — PK compound. `note` override `eng_vocab.meaning` khi hiển thị. FK CASCADE cả 2 chiều.
+- Lý do tách: cho phép hệ thống seed từ common lists (CEFR, chuyên ngành) mà không nhân bản mỗi user; user vẫn cá nhân hoá nghĩa qua `note`.
+
+**Query rule cứng**:
+- Mọi bảng có `user_id` PHẢI kèm `eq(<table>.userId, userId)` trong WHERE. Không có helper generic — mỗi handler tự làm, review kỹ khi PR.
+- Với `eng_vocab`: query "vocab trong scope user X" = `WHERE created_by IS NULL OR created_by = X`. Sort ưu tiên private khi tie (`ORDER BY created_by IS NULL`).
 
 **Migration flow (data-safe, không được skip bước):**
 
 ```
 1. Sửa schema trong server/database/schema/*.ts
-2. pnpm db:generate           # drizzle-kit sinh SQL vào server/database/migrations/
+2. yarn db:generate           # drizzle-kit sinh SQL vào server/database/migrations/
+                              # dùng --custom nếu cần backfill/recreate table (SQLite giới hạn ALTER)
 3. Đọc kỹ file SQL sinh ra    # ⬅ bắt buộc: bắt ALTER/DROP nguy hiểm mất data
-4. pnpm db:migrate:local      # apply D1 local, test
-5. pnpm test:fire && pnpm typecheck
-6. pnpm db:migrate:remote     # chỉ khi 1-5 pass; đây là data thật
+4. yarn db:migrate:local      # apply D1 local, test
+5. yarn test:fire && yarn typecheck
+6. yarn db:dump:remote        # ⬅ BẮT BUỘC snapshot .backups/<ts>.sql trước khi động data thật
+7. yarn db:migrate:remote     # chỉ khi 1-6 pass; đây là data thật
 ```
 
 - Không bao giờ `DROP`/rename cột đang có data nếu không có bước copy. Ưu tiên additive migration.
@@ -175,11 +195,23 @@ export function useDB() {
 - Error trả về có cấu trúc thống nhất: `{ statusCode, statusMessage, data? }` qua `createError`.
 - Auth: `requireUserSession(event)` (nuxt-auth-utils) đầu mỗi route cần bảo vệ.
 
-## 7. Auth (single-user)
+## 7. Auth (multi-user, invite-only)
 
-- `nuxt-auth-utils`: session sealed-cookie, cần env `NUXT_SESSION_PASSWORD` (≥32 ký tự).
-- Single user: 1 credential lưu env (hash password), route `/api/auth/login` verify → `setUserSession(event, { user })`.
-- Không cần bảng session; cookie tự chứa. Hợp app cá nhân + Workers.
+- `nuxt-auth-utils`: session sealed-cookie, cần env `NUXT_SESSION_PASSWORD` (≥32 ký tự). Không cần bảng session; cookie tự chứa.
+- Session shape: `{ user: { id, email, isAdmin } }` (augment ở `auth.d.ts` root).
+- **Login**: `POST /api/auth/login` — query `core_users` theo email, `verifyPassword` scrypt. Message lỗi generic (chống enumeration).
+- **Register** (`POST /api/auth/register`):
+  - Có `token` → validate `core_invites` (unused + not-expired) → dùng email từ invite → tạo user (isAdmin=false) → mark invite used.
+  - Không `token` → bootstrap first-user: chỉ được khi `core_users` rỗng → tạo user isAdmin=true. Sau đó chặn.
+- **Invite** (`/api/admin/invites` GET/POST + `/:id` DELETE, admin-only): sinh raw token (32-byte random, base64url), lưu SHA-256 hash, gửi link `/register?token=<raw>` qua Resend. TTL 7 ngày.
+- **Forgot** (`POST /api/auth/forgot`): luôn trả 200 (anti-enumeration). Nếu email có user → tạo `core_password_resets` (token hash, TTL 1h), gửi link `/reset?token=<raw>`.
+- **Reset** (`POST /api/auth/reset`): validate token → `hashPassword` mới → update `core_users.passwordHash` → mark token used → `clearUserSession`. User login lại bằng password mới.
+- **Middleware `auth.global.ts`**: public routes = `[/login, /register, /forgot, /reset]`; `/admin/*` chặn `!isAdmin`; còn lại require login.
+- **Env**:
+  - `NUXT_SESSION_PASSWORD` (≥32 ký tự) — nuxt-auth-utils.
+  - `NUXT_RESEND_API_KEY`, `NUXT_RESEND_FROM_EMAIL` — Resend. Dev có thể để EMPTY → email log ra console (link copy paste vẫn dùng được).
+  - `NUXT_APP_URL` — base URL để build link trong email (production: URL Pages; dev: `http://localhost:3000`).
+- **Token security**: raw token 32-byte random (base64url ~43 ký tự) chỉ có trong link email; DB lưu SHA-256 hash → DB leak ≠ token dùng được.
 
 ## 8. PWA & offline
 
@@ -194,10 +226,10 @@ DoD:
 
 - [ ] Project chạy `pnpm dev` với D1 local emulate qua nitro-cloudflare-dev.
 - [ ] Deploy được lên CF Pages, D1 remote bound, migration remote chạy OK.
-- [ ] Auth single-user hoạt động (login → session → protected route).
+- [ ] Auth multi-user hoạt động (first-user bootstrap → invite → register → login → protected route; forgot/reset qua email).
 - [ ] `shared/utils/srs.ts` xong + golden test pass (`pnpm test:fire`).
-- [ ] Schema core (`core_cards`, `core_review_logs`) + `eng_vocab`.
-- [ ] Layer `english`: thêm từ vựng, review flashcard chạy qua SRS engine, lưu D1.
+- [ ] Schema core (`core_users`, `core_invites`, `core_password_resets`, `core_review_logs` module-agnostic) + English (`eng_vocab` shared pool + `eng_user_vocab` per-user SRS state).
+- [ ] Layer `english`: thêm từ vựng (system pool reuse hoặc private), search local + Free Dictionary fallback, review flashcard chạy qua SRS engine, lưu D1.
 - [ ] `pnpm typecheck` pass, không `any` không giải thích.
 
 ### Phase 2 — Programming module + stats/streak/dashboard

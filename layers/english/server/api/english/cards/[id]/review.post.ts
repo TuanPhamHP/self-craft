@@ -1,36 +1,38 @@
 /**
- * POST /api/english/cards/:id/review — chấm điểm 1 card.
+ * POST /api/english/cards/:id/review — chấm điểm 1 vocab (user hiện tại).
+ *
+ * :id ở đây là `vocab_id` (không phải core_cards.id — sau restructure shared-pool).
+ * Combo (userId, vocabId) là PK của eng_user_vocab.
  *
  * Flow:
  *  1. Validate id (path) + grade (body) qua Zod.
- *  2. Load core_cards theo id (module='english') → tái tạo SrsState.
+ *  2. Load eng_user_vocab WHERE (userId, vocabId) → tái tạo SrsState.
  *  3. Gọi srsReview(state, grade, now) qua wrapper shared/utils/srs.
- *  4. UPDATE core_cards với state mới + updatedAt.
- *  5. INSERT core_review_logs (snapshot before/after) cho audit trail.
+ *  4. UPDATE eng_user_vocab với state mới.
+ *  5. INSERT core_review_logs (module='english', itemId=vocabId, snapshot before/after) cho audit trail.
  *  6. Trả về srsState mới + due kế tiếp.
  */
 
 import { and, eq } from 'drizzle-orm'
-import { coreCards, coreReviewLogs } from '~~/server/database/schema'
+import { coreReviewLogs, engUserVocab } from '~~/server/database/schema'
 import { srsReview, type Grade, type SrsState } from '#shared/utils/srs'
-import { cardIdParamSchema, cardReviewSchema } from '#shared/schemas/english'
+import { cardReviewSchema, vocabIdParamSchema } from '#shared/schemas/english'
 
 export default defineEventHandler(async (event) => {
-  await requireUserSession(event)
+  const session = await requireUserSession(event)
+  const userId = session.user.id
 
-  // Path param
   const idRaw = getRouterParam(event, 'id')
-  const idParsed = cardIdParamSchema.safeParse(idRaw)
+  const idParsed = vocabIdParamSchema.safeParse(idRaw)
   if (!idParsed.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Invalid card id',
+      statusMessage: 'Invalid vocab id',
       data: idParsed.error.issues,
     })
   }
-  const cardId = idParsed.data
+  const vocabId = idParsed.data
 
-  // Body
   const bodyParsed = await readValidatedBody(event, (body) => cardReviewSchema.safeParse(body))
   if (!bodyParsed.success) {
     throw createError({
@@ -44,17 +46,16 @@ export default defineEventHandler(async (event) => {
   const db = useDB()
   const now = Date.now()
 
-  // Load card — chặn cross-module bằng cách filter module='english'.
   const [row] = await db
     .select()
-    .from(coreCards)
-    .where(and(eq(coreCards.id, cardId), eq(coreCards.module, 'english')))
+    .from(engUserVocab)
+    .where(and(eq(engUserVocab.userId, userId), eq(engUserVocab.vocabId, vocabId)))
     .limit(1)
 
   if (!row) {
     throw createError({
       statusCode: 404,
-      statusMessage: `English card ${cardId} not found`,
+      statusMessage: `English vocab ${vocabId} not in your queue`,
     })
   }
 
@@ -72,9 +73,8 @@ export default defineEventHandler(async (event) => {
 
   const stateAfter = srsReview(stateBefore, grade, now)
 
-  // Persist state mới trên core_cards.
   await db
-    .update(coreCards)
+    .update(engUserVocab)
     .set({
       due: stateAfter.due,
       stability: stateAfter.stability,
@@ -87,11 +87,12 @@ export default defineEventHandler(async (event) => {
       lastReview: stateAfter.lastReview,
       updatedAt: now,
     })
-    .where(eq(coreCards.id, cardId))
+    .where(and(eq(engUserVocab.userId, userId), eq(engUserVocab.vocabId, vocabId)))
 
-  // Audit trail — snapshot before/after để replay/rollback nếu đổi engine.
   await db.insert(coreReviewLogs).values({
-    cardId,
+    userId,
+    module: 'english',
+    itemId: vocabId,
     grade,
     stateBefore: stateBefore.state,
     stabilityBefore: stateBefore.stability,
@@ -105,7 +106,7 @@ export default defineEventHandler(async (event) => {
   })
 
   return {
-    cardId,
+    vocabId,
     srsState: stateAfter,
     due: stateAfter.due,
   }

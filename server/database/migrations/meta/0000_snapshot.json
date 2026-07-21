@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "2f82ec3b-05b6-43a3-a1c1-8570156aa628",
+  "id": "ad8f102a-4aca-4dc2-8230-4d69d1893e21",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "core_cards": {
@@ -13,6 +13,13 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         },
         "module": {
           "name": "module",
@@ -107,24 +114,202 @@
         }
       },
       "indexes": {
-        "idx_core_cards_module_due": {
-          "name": "idx_core_cards_module_due",
+        "idx_core_cards_user_module_due": {
+          "name": "idx_core_cards_user_module_due",
           "columns": [
+            "user_id",
             "module",
             "due"
           ],
           "isUnique": false
         },
-        "idx_core_cards_module_item": {
-          "name": "idx_core_cards_module_item",
+        "idx_core_cards_user_module_item": {
+          "name": "idx_core_cards_user_module_item",
           "columns": [
+            "user_id",
             "module",
             "item_id"
           ],
           "isUnique": false
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "core_cards_user_id_core_users_id_fk": {
+          "name": "core_cards_user_id_core_users_id_fk",
+          "tableFrom": "core_cards",
+          "tableTo": "core_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "core_invites": {
+      "name": "core_invites",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "invited_by": {
+          "name": "invited_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "used_at": {
+          "name": "used_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "uq_core_invites_token_hash": {
+          "name": "uq_core_invites_token_hash",
+          "columns": [
+            "token_hash"
+          ],
+          "isUnique": true
+        },
+        "idx_core_invites_email": {
+          "name": "idx_core_invites_email",
+          "columns": [
+            "email"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "core_invites_invited_by_core_users_id_fk": {
+          "name": "core_invites_invited_by_core_users_id_fk",
+          "tableFrom": "core_invites",
+          "tableTo": "core_users",
+          "columnsFrom": [
+            "invited_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "core_password_resets": {
+      "name": "core_password_resets",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "used_at": {
+          "name": "used_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "uq_core_password_resets_token_hash": {
+          "name": "uq_core_password_resets_token_hash",
+          "columns": [
+            "token_hash"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "core_password_resets_user_id_core_users_id_fk": {
+          "name": "core_password_resets_user_id_core_users_id_fk",
+          "tableFrom": "core_password_resets",
+          "tableTo": "core_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -138,6 +323,13 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         },
         "card_id": {
           "name": "card_id",
@@ -218,9 +410,10 @@
         }
       },
       "indexes": {
-        "idx_core_review_logs_reviewed_at": {
-          "name": "idx_core_review_logs_reviewed_at",
+        "idx_core_review_logs_user_reviewed_at": {
+          "name": "idx_core_review_logs_user_reviewed_at",
           "columns": [
+            "user_id",
             "reviewed_at"
           ],
           "isUnique": false
@@ -234,6 +427,19 @@
         }
       },
       "foreignKeys": {
+        "core_review_logs_user_id_core_users_id_fk": {
+          "name": "core_review_logs_user_id_core_users_id_fk",
+          "tableFrom": "core_review_logs",
+          "tableTo": "core_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
         "core_review_logs_card_id_core_cards_id_fk": {
           "name": "core_review_logs_card_id_core_cards_id_fk",
           "tableFrom": "core_review_logs",
@@ -244,10 +450,71 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "core_users": {
+      "name": "core_users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "is_admin": {
+          "name": "is_admin",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "uq_core_users_email": {
+          "name": "uq_core_users_email",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -261,6 +528,13 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         },
         "word": {
           "name": "word",
@@ -280,7 +554,7 @@
           "name": "example",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "ipa": {
@@ -306,15 +580,30 @@
         }
       },
       "indexes": {
-        "idx_eng_vocab_word": {
-          "name": "idx_eng_vocab_word",
+        "idx_eng_vocab_user_word": {
+          "name": "idx_eng_vocab_user_word",
           "columns": [
+            "user_id",
             "word"
           ],
           "isUnique": false
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "eng_vocab_user_id_core_users_id_fk": {
+          "name": "eng_vocab_user_id_core_users_id_fk",
+          "tableFrom": "eng_vocab",
+          "tableTo": "core_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}

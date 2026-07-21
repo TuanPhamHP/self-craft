@@ -4,7 +4,9 @@ Hướng dẫn vận hành cho Claude Code agents trên repo này. Đọc kèm `
 
 ## Dự án là gì
 
-Learning PWA **cá nhân** (1 user): học Tiếng Anh + Lập trình. Kiến trúc **module-based qua Nuxt Layers**, core dùng chung **SRS engine** (spaced repetition). Ưu tiên **ship nhanh, tránh over-engineering**.
+Learning PWA **multi-user, invite-only** (owner mời qua email; không open registration): học Tiếng Anh + Lập trình. Kiến trúc **module-based qua Nuxt Layers**, core dùng chung **SRS engine** (spaced repetition). Ưu tiên **ship nhanh, tránh over-engineering**.
+
+**Data per-user**: mọi bảng data có `user_id` FK. Mọi server handler PHẢI `requireUserSession(event)` + filter `userId` trong query — quên = leak cross-user.
 
 ## Stack (đã chốt — không tự đổi)
 
@@ -38,14 +40,27 @@ Thêm môn mới = tạo folder `layers/<mod>/` + file `server/database/schema/<
 
 ```
 1. Sửa server/database/schema/*.ts
-2. pnpm db:generate            # sinh SQL migration
+2. yarn db:generate            # sinh SQL migration (hoặc --custom nếu cần backfill)
 3. ĐỌC KỸ file SQL sinh ra     # bắt ALTER/DROP nguy hiểm; ưu tiên additive
-4. pnpm db:migrate:local       # apply D1 local
-5. pnpm test:fire && pnpm typecheck
-6. pnpm db:migrate:remote      # CHỈ khi 1–5 pass — đây là data thật
+4. yarn db:migrate:local       # apply D1 local
+5. yarn test:fire && yarn typecheck
+6. yarn db:dump:remote         # BẮT BUỘC — snapshot .backups/<ts>.sql trước khi động data thật
+7. yarn db:migrate:remote      # CHỈ khi 1–6 pass
 ```
 
 Không DROP/rename cột đang có data nếu chưa copy sang.
+
+## Ghi chú kiến trúc quan trọng
+
+- **`core_cards` tạm trống đến P2.** English chuyển SRS state sang `eng_user_vocab`
+  (per-user, PK (user_id, vocab_id)) khi tách content pool shared/user. `core_cards`
+  được thiết kế module-agnostic ban đầu nhưng chưa có consumer sau English. Giữ nguyên
+  schema, chờ Programming (P2) quyết định: (a) Programming cũng có bảng riêng theo
+  pattern eng_user_vocab → xoá `core_cards`, hoặc (b) Programming dùng `core_cards`.
+  Không quyết bây giờ, tránh mất options.
+
+- **`core_review_logs` module-agnostic**: tham chiếu `(module, item_id)` (không FK
+  cứng) để share qua mọi module. English: `module='english'`, `item_id = eng_vocab.id`.
 
 ## Scaffold sequence (Phase 1, lần đầu)
 
@@ -109,7 +124,10 @@ export default defineConfig({
 });
 ```
 
-Env cần: `NUXT_SESSION_PASSWORD` (≥32 ký tự) cho nuxt-auth-utils.
+Env cần (production):
+- `NUXT_SESSION_PASSWORD` (≥32 ký tự) — nuxt-auth-utils cookie seal.
+- `NUXT_RESEND_API_KEY` + `NUXT_RESEND_FROM_EMAIL` — Resend transactional email (invite + reset password). Dev có thể EMPTY → email log ra console.
+- `NUXT_APP_URL` — base URL app để build link trong email (vd `https://self-craft.pages.dev`).
 
 ## package.json scripts (giữ format comment + tag)
 
@@ -127,6 +145,8 @@ Mỗi script có dòng `"// tên"` phía trên mô tả + tag **LOCAL / DEPLOY /
 	"db:generate": "drizzle-kit generate",
 	"// db:migrate:local": "LOCAL — apply migration D1 local",
 	"db:migrate:local": "wrangler d1 migrations apply learning-db --local",
+	"// db:dump:remote": "PRODUCTION — snapshot D1 remote sang .backups/, BẮT BUỘC trước db:migrate:remote",
+	"db:dump:remote": "wrangler d1 export learning-db --remote --output=.backups/...",
 	"// db:migrate:remote": "PRODUCTION — apply migration D1 remote (DATA THẬT, cẩn thận)",
 	"db:migrate:remote": "wrangler d1 migrations apply learning-db --remote",
 	"// build": "DEPLOY — build Nitro cho CF Pages",

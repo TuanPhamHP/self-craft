@@ -1,42 +1,46 @@
 /**
- * GET /api/english/cards/due — danh sách card tới hạn của module English.
+ * GET /api/english/cards/due — danh sách card tới hạn của user hiện tại (module English).
  *
- * Query core_cards WHERE module='english' AND due <= now, join eng_vocab lấy content.
- * Order theo due asc để card quá hạn lâu nhất lên trước.
- * Dùng index idx_core_cards_module_due (đã có trong schema).
+ * Query eng_user_vocab WHERE userId=? AND due <= now, JOIN eng_vocab lấy content.
+ * Dùng index idx_eng_user_vocab_user_state_due (leading col user_id, state, due).
+ * ORDER due asc → card quá hạn lâu nhất lên trước.
  */
 
 import { and, asc, eq, lte } from 'drizzle-orm'
-import { coreCards, engVocab } from '~~/server/database/schema'
+import { engUserVocab, engVocab } from '~~/server/database/schema'
 import type { SrsState } from '#shared/utils/srs'
 
 export default defineEventHandler(async (event) => {
-  await requireUserSession(event)
+  const session = await requireUserSession(event)
+  const userId = session.user.id
 
   const db = useDB()
   const now = Date.now()
 
   const rows = await db
     .select({
-      cardId: coreCards.id,
+      vocabId: engUserVocab.vocabId,
       word: engVocab.word,
       meaning: engVocab.meaning,
       example: engVocab.example,
       ipa: engVocab.ipa,
-      due: coreCards.due,
-      stability: coreCards.stability,
-      difficulty: coreCards.difficulty,
-      elapsedDays: coreCards.elapsedDays,
-      scheduledDays: coreCards.scheduledDays,
-      reps: coreCards.reps,
-      lapses: coreCards.lapses,
-      state: coreCards.state,
-      lastReview: coreCards.lastReview,
+      topic: engVocab.topic,
+      band: engVocab.band,
+      note: engUserVocab.note,
+      due: engUserVocab.due,
+      stability: engUserVocab.stability,
+      difficulty: engUserVocab.difficulty,
+      elapsedDays: engUserVocab.elapsedDays,
+      scheduledDays: engUserVocab.scheduledDays,
+      reps: engUserVocab.reps,
+      lapses: engUserVocab.lapses,
+      state: engUserVocab.state,
+      lastReview: engUserVocab.lastReview,
     })
-    .from(coreCards)
-    .innerJoin(engVocab, eq(coreCards.itemId, engVocab.id))
-    .where(and(eq(coreCards.module, 'english'), lte(coreCards.due, now)))
-    .orderBy(asc(coreCards.due))
+    .from(engUserVocab)
+    .innerJoin(engVocab, eq(engUserVocab.vocabId, engVocab.id))
+    .where(and(eq(engUserVocab.userId, userId), lte(engUserVocab.due, now)))
+    .orderBy(asc(engUserVocab.due))
 
   return rows.map((r) => {
     const srsState: SrsState = {
@@ -51,11 +55,14 @@ export default defineEventHandler(async (event) => {
       lastReview: r.lastReview,
     }
     return {
-      cardId: r.cardId,
+      vocabId: r.vocabId,
       word: r.word,
       meaning: r.meaning,
       example: r.example,
       ipa: r.ipa,
+      topic: r.topic,
+      band: r.band,
+      note: r.note,
       srsState,
     }
   })
